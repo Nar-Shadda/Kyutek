@@ -1,0 +1,6 @@
+E:\Fundamentials\TeamWork\TeamWork\SoundAndText\bin\Debug\SoundAndText.exe.config
+E:\Fundamentials\TeamWork\TeamWork\SoundAndText\bin\Debug\SoundAndText.exe
+E:\Fundamentials\TeamWork\TeamWork\SoundAndText\bin\Debug\SoundAndText.pdb
+E:\Fundamentials\TeamWork\TeamWork\SoundAndText\obj\Debug\SoundAndText.csprojResolveAssemblyReference.cache
+E:\Fundamentials\TeamWork\TeamWork\SoundAndText\obj\Debug\SoundAndText.exe
+E:\Fundamentials\TeamWork\TeamWork\SoundAndText\obj\Debug\SoundAndText.pdb
