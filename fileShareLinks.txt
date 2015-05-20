@@ -1,0 +1,4 @@
+Background -> http://tranzit.dir.bg/load.php?id=4MtvKKOJfsotQT2d2304269
+typewriter -> http://tranzit.dir.bg/load.php?id=kGNlHIIYp1fDHDIP2304271
+logo -> http://tranzit.dir.bg/load.php?id=wQmuDV7NflMabzm22304274
+startText -> http://tranzit.dir.bg/load.php?id=0HgoweD9kTzFcQGN2304275
