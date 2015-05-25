@@ -60,9 +60,8 @@ namespace Kyutek
                 Thread.Sleep(500);
             }
 
-            // story - 1 (introduction)
+            // part 1 - introduction and character creation
             Console.SetCursorPosition(0, 10);
-            
             PrintText(@"text-files/story/story-1.txt", @"audio/typewriter.wav");
             Console.CursorVisible = true;
             Console.ReadLine();
@@ -74,18 +73,12 @@ namespace Kyutek
             Thread.Sleep(500);
             PrintText(@"text-files/story/story-2.txt", @"audio/typewriter.wav");
             Console.WriteLine();
-            Console.WriteLine(@"1. warrior
-2. rogue
-3. wizzard");
-            string choice = Console.ReadLine();
-            Hero myHero = new Hero(choice);
 
-            Console.WriteLine(myHero.HeroClass);
-            Console.WriteLine(myHero.Life);
-            Console.WriteLine(myHero.MinDmg);
-            Console.WriteLine(myHero.MaxDmg);
-            Console.ReadLine();
-            //Console.ReadLine();
+            // choose and create a character
+            CreateCharacter();
+            
+
+            
             // choose a name
 
             // story - 2 (prequel)
@@ -111,6 +104,14 @@ namespace Kyutek
             // outro
 
             // credits
+        }
+
+        static void CreateCharacter()
+        {
+            // ask user to choose a character class
+            
+            string choice = Console.ReadLine();
+            Hero myHero = new Hero(choice);
         }
 
         static void PrintAsciiText(string textPath, int posX = 0, bool clearScreen = true)
