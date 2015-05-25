@@ -24,52 +24,55 @@ namespace Kyutek
             //intro
             SoundPlayer player = new SoundPlayer(@"audio/intro.wav");
             //team nar-shadda presents
-            //player.Play();
-            //PlayIntro(@"text-files/intro-outro/team.txt", 20);
-            //PlayIntro(@"text-files/intro-outro/nar-shadda.txt", 14);
-            //PlayIntro(@"text-files/intro-outro/presents.txt", 3);
-            //Thread.Sleep(1000);
-            //player.Stop();
+            player.Play();
+            PlayIntro(@"text-files/intro-outro/team.txt", 20);
+            PlayIntro(@"text-files/intro-outro/nar-shadda.txt", 14);
+            PlayIntro(@"text-files/intro-outro/presents.txt", 3);
+            Thread.Sleep(1000);
+            player.Stop();
 
-            ////game name
-            //player = new SoundPlayer(@"audio/vynil-rew.wav");
-            //player.Play();
-            //PlayIntro(@"text-files/intro-outro/kyutek.txt", 8, false);
-            //player.Stop();
-            //Console.SetCursorPosition(28, 20);
-            //PrintText(@"text-files/intro-outro/quest.txt", @"audio/typewriter.wav");
+            //game name
+            player = new SoundPlayer(@"audio/vynil-rew.wav");
+            player.Play();
+            PlayIntro(@"text-files/intro-outro/kyutek.txt", 8, false);
+            player.Stop();
+            Console.SetCursorPosition(28, 20);
+            PrintText(@"text-files/intro-outro/quest.txt", @"audio/typewriter.wav");
 
-            ////press enter to continue
-            //while (true)
-            //{
-            //    if (Console.KeyAvailable) //needs testing, doesn't work properly
-            //    {
-            //        ConsoleKeyInfo key = Console.ReadKey();
+            //press enter to continue
+            while (true)
+            {
+                if (Console.KeyAvailable) //needs testing, doesn't work properly
+                {
+                    ConsoleKeyInfo key = Console.ReadKey();
 
-            //        if (key.Key == ConsoleKey.Enter)
-            //        {
-            //            Console.Clear();
-            //            break;
-            //        }
-            //    }
-            //    Console.SetCursorPosition(33, 23);
-            //    Console.WriteLine("press enter");
-            //    Thread.Sleep(500);
-            //    Console.SetCursorPosition(33, 23);
-            //    Console.WriteLine("           ");
-            //    Thread.Sleep(500);
-            //}
+                    if (key.Key == ConsoleKey.Enter)
+                    {
+                        Console.Clear();
+                        break;
+                    }
+                }
+                Console.SetCursorPosition(33, 23);
+                Console.WriteLine("press enter");
+                Thread.Sleep(500);
+                Console.SetCursorPosition(33, 23);
+                Console.WriteLine("           ");
+                Thread.Sleep(500);
+            }
 
-
-            //// story - 1 (introduction)
-            //PrintText(@"text-files/story/story-1.txt", @"audio/typewriter.wav");
-            //Console.CursorVisible = true;
-            //Console.ReadLine();
-            //Console.CursorVisible = true;
-            //Thread.Sleep(750);
-            //Console.WriteLine("Браааат...");
-            //Thread.Sleep(500);
-            //PrintText(@"text-files/story/story-2.txt", @"audio/typewriter.wav");
+            // story - 1 (introduction)
+            Console.SetCursorPosition(0, 10);
+            
+            PrintText(@"text-files/story/story-1.txt", @"audio/typewriter.wav");
+            Console.CursorVisible = true;
+            Console.ReadLine();
+            Console.CursorVisible = false;
+            Thread.Sleep(750);
+            Console.Clear();
+            Console.SetCursorPosition(0, 10);
+            Console.WriteLine("Браааат...");
+            Thread.Sleep(500);
+            PrintText(@"text-files/story/story-2.txt", @"audio/typewriter.wav");
             Console.WriteLine();
             Console.WriteLine(@"1. warrior
 2. rogue
@@ -110,7 +113,7 @@ namespace Kyutek
             // credits
         }
 
-        static void PlayIntro(string textPath, int posX, bool clearScreen = true)
+        static void PrintAsciiText(string textPath, int posX = 0, bool clearScreen = true)
         {
             StreamReader reader = new StreamReader(textPath);
             int posY = 10;
@@ -160,9 +163,30 @@ namespace Kyutek
                     }
                     player.Stop();
                     Console.WriteLine();
-                    Thread.Sleep(500);
+                    Thread.Sleep(400);
                 }
             }
+        }
+        static void PrintDrawings(string path)
+        {
+            StreamReader reader = new StreamReader(path);
+            using (reader)
+            {
+                while (true)
+                {
+                    string line = reader.ReadLine();
+                    if (line == null)
+                    {
+                        break;
+                    }
+                    Console.WriteLine(line);
+                }
+            }
+        }
+        static void GameOver()
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            PrintAsciiText(@"text-files/text/game-over.txt", 12, false);
         }
     }
 }
