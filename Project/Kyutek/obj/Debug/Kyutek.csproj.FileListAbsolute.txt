@@ -4,3 +4,9 @@ C:\Users\darighteous1\Desktop\Programming\SoftUni\1. Fundamentals\01. C# Advance
 C:\Users\darighteous1\Desktop\Programming\SoftUni\1. Fundamentals\01. C# Advanced\Kyutek\Kyutek\obj\Debug\Kyutek.csprojResolveAssemblyReference.cache
 C:\Users\darighteous1\Desktop\Programming\SoftUni\1. Fundamentals\01. C# Advanced\Kyutek\Kyutek\obj\Debug\Kyutek.exe
 C:\Users\darighteous1\Desktop\Programming\SoftUni\1. Fundamentals\01. C# Advanced\Kyutek\Kyutek\obj\Debug\Kyutek.pdb
+C:\Users\darighteous1\repos\Kyutek\Project\Kyutek\bin\Debug\Kyutek.exe.config
+C:\Users\darighteous1\repos\Kyutek\Project\Kyutek\obj\Debug\Kyutek.exe
+C:\Users\darighteous1\repos\Kyutek\Project\Kyutek\obj\Debug\Kyutek.pdb
+C:\Users\darighteous1\repos\Kyutek\Project\Kyutek\bin\Debug\Kyutek.exe
+C:\Users\darighteous1\repos\Kyutek\Project\Kyutek\bin\Debug\Kyutek.pdb
+C:\Users\darighteous1\repos\Kyutek\Project\Kyutek\obj\Debug\Kyutek.csprojResolveAssemblyReference.cache

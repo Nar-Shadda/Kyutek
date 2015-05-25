@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kyutek
 {
-    class Enemies
+    class Enemy
     {
     }
 }

@@ -41,8 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enemies.cs" />
-    <Compile Include="Heroes.cs" />
+    <Compile Include="Enemy.cs" />
+    <Compile Include="Hero.cs" />
     <Compile Include="Kyutek.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
