@@ -25,16 +25,16 @@ namespace Kyutek
             SoundPlayer player = new SoundPlayer(@"audio/intro.wav");
             //team nar-shadda presents
             player.Play();
-            PlayIntro(@"text-files/intro-outro/team.txt", 20);
-            PlayIntro(@"text-files/intro-outro/nar-shadda.txt", 14);
-            PlayIntro(@"text-files/intro-outro/presents.txt", 3);
+            PrintAsciiText(@"text-files/intro-outro/team.txt", 20);
+            PrintAsciiText(@"text-files/intro-outro/nar-shadda.txt", 14);
+            PrintAsciiText(@"text-files/intro-outro/presents.txt", 3);
             Thread.Sleep(1000);
             player.Stop();
 
             //game name
             player = new SoundPlayer(@"audio/vynil-rew.wav");
             player.Play();
-            PlayIntro(@"text-files/intro-outro/kyutek.txt", 8, false);
+            PrintAsciiText(@"text-files/intro-outro/kyutek.txt", 8, false);
             player.Stop();
             Console.SetCursorPosition(28, 20);
             PrintText(@"text-files/intro-outro/quest.txt", @"audio/typewriter.wav");
