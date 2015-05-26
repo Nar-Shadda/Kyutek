@@ -23,8 +23,6 @@ namespace Kyutek
             Console.CursorVisible = false;
             Console.OutputEncoding = Encoding.UTF8;
 
-            Victory();
-            GameOver();
             //intro
             // PlayIntro();
 
@@ -260,7 +258,7 @@ namespace Kyutek
             }
         }
 
-        static void PrintDrawings(string path)
+        static void PrintDrawing(string path)
         {
             StreamReader reader = new StreamReader(path);
             using (reader)
