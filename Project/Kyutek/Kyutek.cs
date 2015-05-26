@@ -277,14 +277,16 @@ namespace Kyutek
         static void PrintRandomLine(string textPath, Random rng)
         {
             // save file contents as string array
-            
+            string[] text = File.ReadAllLines(textPath);
+                            
             // roll random number between 0 and array length (note! upper boundary is exclusive)
+            int index = rng.Next(text.Length);
             
             // declare a string variable to hold the random element from the array
+            string currentText = text[index];
 
             // print the string on the console using PrintText method
-
-            
+            PrintText(currentText);            
         }
 
         static void GameOver()
