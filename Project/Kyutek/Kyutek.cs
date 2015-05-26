@@ -231,7 +231,7 @@ namespace Kyutek
             foreach (char letter in text)
             {
                 Console.Write(letter);
-                Thread.Sleep(735);
+                Thread.Sleep(35);
             }
             player.Stop();
             Console.WriteLine();
