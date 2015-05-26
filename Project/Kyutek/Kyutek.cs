@@ -11,10 +11,9 @@ namespace Kyutek
 {
     class Kyutek
     {
-        
         const int WindowHeight = 36;
         public const string typewriterPath = @"audio/typewriter.wav";
-
+        
         static void Main(string[] args)
         {
             //set window size and buffer size
@@ -22,9 +21,12 @@ namespace Kyutek
             Console.BufferHeight = WindowHeight;
             Console.CursorVisible = false;
             Console.OutputEncoding = Encoding.UTF8;
-
+            
+            //initialize random generator
+            Random rng = new Random();
+            
             //intro
-           // PlayIntro();
+            // PlayIntro();
 
             // part 1 - introduction
             StoryIntroduction();
@@ -42,8 +44,8 @@ namespace Kyutek
                                                                                         probably have to set encoding in hero.name setter*/
             // story - 3 (going to the bar, first interaction) 
             PrintTextFromFile(@"text-files/story/story-3.txt");
-            
-            Battle(player, enemy);
+
+            //Battle(player, enemy);
             // first battle
 
             // story - 4
@@ -60,7 +62,7 @@ namespace Kyutek
             PrintTextFromFile(@"text-files/story/story-6.txt");
             Console.WriteLine("Y/N");
             string choice = Console.ReadLine().ToLower();
-            
+
             while (choice != "y" && choice != "n")
             {
                 Console.Write('\r');
@@ -191,7 +193,7 @@ namespace Kyutek
                     PrintText(heroClass[2]);
                     break;
             }
-            
+
             return player;
         }
 
@@ -271,7 +273,20 @@ namespace Kyutek
                 }
             }
         }
-        
+
+        static void PrintRandomLine(string textPath, Random rng)
+        {
+            // save file contents as string array
+            
+            // roll random number between 0 and array length (note! upper boundary is exclusive)
+            
+            // declare a string variable to hold the random element from the array
+
+            // print the string on the console using PrintText method
+
+            
+        }
+
         static void GameOver()
         {
             // invoke losing taunt
@@ -286,18 +301,11 @@ namespace Kyutek
             PrintAsciiText(@"text-files/text/win.txt", 27);
         }
 
-        static int Rng(int min, int max)
+        static void Battle(Hero player, Enemy enemy, Random rng)
         {
-            /* write logic for random generator
-             * has to work with dmg
-             * array indexes
-             */
-            return 1;
-        }
-
-        static void Battle(Hero player, Enemy enemy)
-        {
+            
             // invoke ascii drawing
+            
             // invoke taunts
 
             //add bool var to track whose turn it is to strike
