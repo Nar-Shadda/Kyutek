@@ -1,0 +1,6 @@
+C:\Users\darighteous1\repos\Kyutek\Project\TEST\bin\Debug\TEST.exe.config
+C:\Users\darighteous1\repos\Kyutek\Project\TEST\bin\Debug\TEST.exe
+C:\Users\darighteous1\repos\Kyutek\Project\TEST\bin\Debug\TEST.pdb
+C:\Users\darighteous1\repos\Kyutek\Project\TEST\obj\Debug\TEST.csprojResolveAssemblyReference.cache
+C:\Users\darighteous1\repos\Kyutek\Project\TEST\obj\Debug\TEST.exe
+C:\Users\darighteous1\repos\Kyutek\Project\TEST\obj\Debug\TEST.pdb

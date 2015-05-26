@@ -11,22 +11,25 @@ namespace Kyutek
 {
     class Kyutek
     {
+
+        // global multiplication index - easy, medium, hard
         const int WindowHeight = 36;
         public const string typewriterPath = @"audio/typewriter.wav";
         
         static void Main(string[] args)
         {
+            
             //set window size and buffer size
             Console.WindowHeight = WindowHeight;
             Console.BufferHeight = WindowHeight;
             Console.CursorVisible = false;
             Console.OutputEncoding = Encoding.UTF8;
-            
+
             //initialize random generator
             Random rng = new Random();
-            
+
             //intro
-            // PlayIntro();
+            PlayIntro();
 
             // part 1 - introduction
             StoryIntroduction();
@@ -40,12 +43,12 @@ namespace Kyutek
             Console.CursorVisible = true;
             player.Name = Console.ReadLine();
 
-            Console.WriteLine("И така, {0}, време е да да се разършим!", player.Name); /* does not print cyrillic characters properly
+            Console.WriteLine("И така, {0}, време е да да се разкършим!", player.Name); /* does not print cyrillic characters properly
                                                                                         probably have to set encoding in hero.name setter*/
             // story - 3 (going to the bar, first interaction) 
             PrintTextFromFile(@"text-files/story/story-3.txt");
 
-            //Battle(player, enemy);
+            //Battle(player, enemy, rnd);
             // first battle
 
             // story - 4
@@ -61,8 +64,8 @@ namespace Kyutek
             // story 6
             PrintTextFromFile(@"text-files/story/story-6.txt");
             Console.WriteLine("Y/N");
-            string choice = Console.ReadLine().ToLower();
 
+            string choice = Console.ReadLine().ToLower();
             while (choice != "y" && choice != "n")
             {
                 Console.Write('\r');
@@ -231,7 +234,7 @@ namespace Kyutek
             foreach (char letter in text)
             {
                 Console.Write(letter);
-                Thread.Sleep(735);
+                Thread.Sleep(35);
             }
             player.Stop();
             Console.WriteLine();
@@ -257,34 +260,35 @@ namespace Kyutek
             }
         }
 
-        static void PrintDrawing(string path)
+        static void PrintDrawing(string path, Random rng)
         {
-            StreamReader reader = new StreamReader(path);
-            using (reader)
+            string[] drawing = File.ReadAllLines(path);
+            int startIndex = (Console.WindowWidth - drawing[0].Length) / 2;
+            int startRow = 3;
+            foreach (var item in drawing)
             {
-                while (true)
-                {
-                    string line = reader.ReadLine();
-                    if (line == null)
-                    {
-                        break;
-                    }
-                    Console.WriteLine(line);
-                }
+                Console.SetCursorPosition(startIndex, startRow);
+                Console.WriteLine(item);
+                startRow++;
             }
+
+            PrintRandomLine(@"text-files/text/taunts.txt", startIndex, startRow + 1, rng);
         }
 
-        static void PrintRandomLine(string textPath, Random rng)
+        static void PrintRandomLine(string textPath, int startIndex, int startRow, Random rng)
         {
             // save file contents as string array
-            
+            string[] text = File.ReadAllLines(textPath);
+
             // roll random number between 0 and array length (note! upper boundary is exclusive)
-            
+            int index = rng.Next(text.Length);
+
             // declare a string variable to hold the random element from the array
+            string currentText = text[index];
 
             // print the string on the console using PrintText method
-
-            
+            Console.SetCursorPosition(startIndex, startRow);
+            PrintText(currentText);
         }
 
         static void GameOver()
@@ -304,19 +308,18 @@ namespace Kyutek
         static void Battle(Hero player, Enemy enemy, Random rng)
         {
             
-            // invoke ascii drawing
+            // ignore this: invoke ascii drawing
             
-            // invoke taunts
-
             //add bool var to track whose turn it is to strike
+            // players should hit like this 1 2 2 1 1 2 2  ...
 
             while (true)
             {
                 // check whose turn it is
                 // rolls should be done by the player (read command from console)
-                // commands can be "hit", "double", "stun", "heal"
-                // check for hit (roll random 0-10, if it is 0 - miss)
-                // if hit successful check dmg (roll random (MinDmg, MaxDmg)
+                // ignore this: commands can be "hit", "double", "stun", "heal"
+                // check for hit (roll random 0-10, if it is 0 - skip turn)
+                // if hit successful check dmg (roll random (MinDmg, MaxDmg+1)
                 // substract dmg done from player/enemy current health
                 // check if current health is <= 0
                 // if current health <= 0
