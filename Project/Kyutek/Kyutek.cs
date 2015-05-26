@@ -24,7 +24,8 @@ namespace Kyutek
             
             //initialize random generator
             Random rng = new Random();
-            
+            PrintDrawing(@"text-files/drawings/barb.txt", rng);
+            Console.ReadLine();
             //intro
             // PlayIntro();
 
@@ -234,6 +235,7 @@ namespace Kyutek
                 Thread.Sleep(35);
             }
             player.Stop();
+            player.Dispose();
             Console.WriteLine();
             Thread.Sleep(400);
         }
@@ -257,24 +259,22 @@ namespace Kyutek
             }
         }
 
-        static void PrintDrawing(string path)
+        static void PrintDrawing(string path, Random rng)
         {
-            StreamReader reader = new StreamReader(path);
-            using (reader)
+            string[] drawing = File.ReadAllLines(path);
+            int startIndex = (Console.WindowWidth - drawing[0].Length) / 2;
+            int startRow = 3;
+            foreach (var item in drawing)
             {
-                while (true)
-                {
-                    string line = reader.ReadLine();
-                    if (line == null)
-                    {
-                        break;
-                    }
-                    Console.WriteLine(line);
-                }
+                Console.SetCursorPosition(startIndex, startRow);
+                Console.WriteLine(item);
+                startRow++;
             }
+
+            PrintRandomLine(@"text-files/text/taunts.txt", startIndex, startRow+1, rng);
         }
 
-        static void PrintRandomLine(string textPath, Random rng)
+        static void PrintRandomLine(string textPath, int startIndex, int startRow, Random rng)
         {
             // save file contents as string array
             string[] text = File.ReadAllLines(textPath);
@@ -286,6 +286,7 @@ namespace Kyutek
             string currentText = text[index];
 
             // print the string on the console using PrintText method
+            Console.SetCursorPosition(startIndex, startRow);
             PrintText(currentText);            
         }
 
