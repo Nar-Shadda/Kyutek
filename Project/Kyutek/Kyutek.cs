@@ -279,12 +279,14 @@ namespace Kyutek
         
         static void GameOver()
         {
+            // invoke losing taunt
             Console.ForegroundColor = ConsoleColor.DarkRed;
             PrintAsciiText(@"text-files/text/game-over.txt", 12, false);
         }
 
         static void Victory()
         {
+            // invoke victory taunt
             Console.ForegroundColor = ConsoleColor.Green;
             PrintAsciiText(@"text-files/text/win.txt", 27);
         }
@@ -296,6 +298,27 @@ namespace Kyutek
              * array indexes
              */
             return 1;
+        }
+
+        static void Battle(Hero player, Enemy enemy)
+        {
+            // invoke ascii drawing
+            // invoke taunts
+
+            //add bool var to track whose turn it is to strike
+
+            while (true)
+            {
+                // check whose turn it is
+                // rolls should be done by the player (read command from console)
+                // commands can be "hit", "double", "stun", "heal"
+                // check for hit (roll random 0-10, if it is 0 - miss)
+                // if hit successful check dmg (roll random (MinDmg, MaxDmg)
+                // substract dmg done from player/enemy current health
+                // check if current health is <= 0
+                // if current health <= 0
+                // character dies - if hero dies invoke GameOver() and return, else invoke Victory()
+            }
         }
     }
 }
