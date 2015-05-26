@@ -24,10 +24,10 @@ namespace Kyutek
             Console.OutputEncoding = Encoding.UTF8;
 
             //intro
-            // PlayIntro();
+           // PlayIntro();
 
             // part 1 - introduction
-            //StoryIntroduction();
+            StoryIntroduction();
 
             // choose and create a character
             Hero player = CreateCharacter();
@@ -39,12 +39,11 @@ namespace Kyutek
             player.Name = Console.ReadLine();
 
             Console.WriteLine("И така, {0}, време е да да се разършим!", player.Name); /* does not print cyrillic characters properly
-                                                                                        probably have to set encoding in hero class when setting hero name*/
-            Console.ReadLine();
-
+                                                                                        probably have to set encoding in hero.name setter*/
             // story - 3 (going to the bar, first interaction) 
             PrintTextFromFile(@"text-files/story/story-3.txt");
-
+            
+            Battle(player, enemy);
             // first battle
 
             // story - 4
@@ -224,15 +223,13 @@ namespace Kyutek
 
         static void PrintText(string text)
         {
-            Console.OutputEncoding = Encoding.UTF8;
-
-            SoundPlayer player = new System.Media.SoundPlayer(typewriterPath);
+            SoundPlayer player = new SoundPlayer(typewriterPath);
 
             player.Play();
             foreach (char letter in text)
             {
                 Console.Write(letter);
-                Thread.Sleep(35);
+                Thread.Sleep(735);
             }
             player.Stop();
             Console.WriteLine();
