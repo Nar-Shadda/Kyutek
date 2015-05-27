@@ -24,27 +24,17 @@ namespace Kyutek
 
             //initialize random generator
             Random rng = new Random();
-            Hero p = new Hero("3");
-            ConversationWithGitsa(p);
             //intro
-            PlayIntro();
+            //PlayIntro();
 
-            Console.WriteLine("Избери трудност:");
-            string difficultyChoice = Console.ReadLine();
-            switch (difficultyChoice)
-            {
-                case "Пълен айляк":
-                    break;
-                case "Нек'во нормално":
-                    break;
-                case "Като да се пребориш за концерт на Милко":
-                    break;
-            }
+            //ChooseDifficulty(); - not complete
+
             // part 1 - introduction
-            StoryIntroduction();
+            //StoryIntroduction();
 
             // choose and create a character
             Hero player = CreateCharacter();
+
             // choose a name
             Console.SetCursorPosition(0, 13);
             PrintText("Сега, когато вече си нов човек, е време да си избереш и ново име...");
@@ -57,20 +47,22 @@ namespace Kyutek
             // story - 3 (going to the bar, first interaction) 
             PrintTextFromFile(@"text-files/story/story-3.txt");
 
-            //Battle(player, enemy, rnd);
             // first battle
+            Battle(player, new Enemy(1), rng);
 
             // story - 4
             PrintTextFromFile(@"text-files/story/story-4.txt");
 
             // second battle
+            Battle(player, new Enemy(2), rng);
 
             // story - 5
             PrintTextFromFile(@"text-files/story/story-5.txt");
 
             // third battle
+            Battle(player, new Enemy(3), rng);
 
-            // story 6
+            // secret encounter
             PrintTextFromFile(@"text-files/story/story-6.txt");
             Console.WriteLine("Y/N");
 
@@ -82,18 +74,81 @@ namespace Kyutek
                 Console.Write('\r');
                 choice = Console.ReadLine().ToLower();
             }
+            if (choice == "y")
+            {
+                int chance = rng.Next(10);
+                if (chance == 3 || chance == 6 || chance == 9)
+                {
+                    PrintText("Намери бъклицата на дядо, ще я изпиеш ли?");
+                    Console.WriteLine("Y/N");
+                    
+                    string drink = Console.ReadLine().ToLower();
+                    if (drink == "y")
+                    {
+                        PrintText("Добро решение, няма нищо по-добро от отлежала гроздова!");
+                        PrintText("Усещаш мощен прилив на енергия, получаваш допълнително 10 сила");
+                        player.MinDmg += 10;
+                        player.MaxDmg += 10;
+                    }
+                }
 
+                else if (chance == 2 || chance == 4 || chance == 8)
+                {
+                    PrintText("Намираш много запазено пардесю! Пробваш го и установяваш, че ти седи чудесно!");
+                    PrintText("Получаваш допълнително 30 точки живот");
+                    player.MaxLife += 30;
+                    player.CurrentLife = player.MaxLife;
+                }
+                else if (chance == 0)
+                {
+                    PrintText("Навеждаш се, за да огледаш хубаво какво има в дупката и изведнъж");
+                    PrintText("някой ти бърка в окото 'Кво зяпаш бе, тюфлек!'");
+                    PrintText("Губиш 5 точки живот. Другият път може би е по-добре да не се вреш в чуждите работи.");
+                    player.CurrentLife -= 5;
+                }
+                else
+                {
+                    PrintText("Драсваш клечка кибрит и оглеждаш съдържанието на дупката");
+                    PrintText("За съжаление намираш само старо списание със слепени страници и шишенце вазелин");
+                    PrintText("Помисляш си 'Каква странна комбинация' и продължаваш по пътя си.");
 
+                }
+            }
+            
+            Thread.Sleep(1500);
+            Console.Clear();
 
+            // right before the boss
             PrintTextFromFile(@"text-files/story/story-7.txt");
 
             // final battle
+            Battle(player, new Enemy(4), rng);
 
             //conversation with gitsa
+            ConversationWithGitsa(player);
+            
+            //the end
+            TheEnd();
 
-            // outro
+            // outro (credits)
+            PrintTextFromFile(@"text-files/intro-outro/outro.txt");
+        }
 
-            // credits
+        private static void ChooseDifficulty()
+        {
+
+            // need to add global var and this method shoud set its value according to user choice
+            Console.WriteLine("Избери трудност:");
+            string difficultyChoice = Console.ReadLine();
+            switch (difficultyChoice)
+            {
+                case "Пълен айляк":
+                    break;
+                case "Нек'во нормално":
+                    break;
+                case "Като да се пребориш за концерт на Милко":
+                    break;
+            }
         }
 
         private static void PlayIntro()
@@ -347,18 +402,20 @@ namespace Kyutek
         {
 
             // ignore this: invoke ascii drawing
+            PrintDrawing(player.DrawingPath, rng);
+
+            PrintDrawing(enemy.DrawingPath, rng);
 
             //add bool var to track whose turn it is to strike
-            // players should hit like this 1 2 2 1 1 2 2  ...
 
-            bool pleyPlayer = false;
-            int playerHit = rng.Next(0, 11);
+            bool isPlayer = false;
+            int playerHit = rng.Next(0, 10);
             enemy.CurrentLife -= rng.Next(player.MaxDmg, player.MaxDmg);
 
             while (true)
             {
 
-                if (pleyPlayer == true)
+                if (isPlayer == true)
                 {
                     for (int i = 0; i < 2; i++)
                     {
@@ -376,7 +433,7 @@ namespace Kyutek
                             }
                         }
                     }
-                    pleyPlayer = false;
+                    isPlayer = false;
                 }
                 else
                 {
@@ -396,7 +453,7 @@ namespace Kyutek
                             }
                         }
                     }
-                    pleyPlayer = true;
+                    isPlayer = true;
 
                 }
 
@@ -426,9 +483,9 @@ namespace Kyutek
             for (int i = 0; i < playerDrawing.Length; i++)
             {
                 Console.Write(playerDrawing[i]);
-                if (i>= playerDrawing.Length/3 && textIndex < playerTalk.Length)
+                if (i >= playerDrawing.Length / 3 && textIndex < playerTalk.Length)
                 {
-                    Console.WriteLine(" {0}. {1}", textIndex+1, playerTalk[textIndex]);
+                    Console.WriteLine(" {0}. {1}", textIndex + 1, playerTalk[textIndex]);
                     textIndex++;
                 }
                 else
@@ -436,7 +493,7 @@ namespace Kyutek
                     Console.WriteLine();
                 }
             }
-            
+
             string choice = Console.ReadLine();
             Thread.Sleep(500);
             Console.Clear();
@@ -468,7 +525,6 @@ namespace Kyutek
             }
             Thread.Sleep(1500);
             Console.Clear();
-            TheEnd();
         }
     }
 }
