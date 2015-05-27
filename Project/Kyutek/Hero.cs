@@ -8,6 +8,7 @@
         private int minDmg;
         private int maxDmg;
         private string name;
+        private string drawingPath;
 
         public string Name { get; set; }
         public int MaxLife { get; set; }
@@ -15,6 +16,7 @@
         public int MinDmg { get; set; }
         public int MaxDmg { get; set; }
         public string HeroClass { get; set; }
+        public string DrawingPath { get; set; }
         
         public Hero(string choice)
         {
@@ -27,6 +29,7 @@
                     this.MinDmg = 9;
                     this.MaxDmg = 12;
                     this.HeroClass = "Манаф-чекръкчия";
+                    this.DrawingPath = @"text-files/drawings/warrior.txt";
                     break;
                 //rogue
                 case "2":
@@ -34,6 +37,7 @@
                     this.MinDmg = 6;
                     this.MaxDmg = 15;
                     this.HeroClass = "Дребен тарикат";
+                    this.DrawingPath = @"text-files/drawings/rogue.txt";
                     break;
                 //wizzard
                 case "3":
@@ -41,6 +45,7 @@
                     this.MinDmg = 11;
                     this.MaxDmg = 11;
                     this.HeroClass = "Ельоменат";
+                    this.DrawingPath = @"text-files/drawings/wizard.txt";
                     break;
             }
         }

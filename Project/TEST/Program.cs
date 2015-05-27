@@ -10,13 +10,16 @@ namespace TEST
     class Program
     {
         const int WindowHeight = 36;
-        static void Main(string[] args)
+        static void Main()
         {
+            
             Console.WindowHeight = WindowHeight;
             Console.BufferHeight = WindowHeight;
             Console.CursorVisible = false;
             Console.OutputEncoding = Encoding.UTF8;
             Random rng = new Random();
+            
+
 
             string[] drawing = File.ReadAllLines(@"../../../Kyutek/bin/Debug/text-files/drawings/wizard.txt");
             int startIndex = (80-drawing[0].Length)/2;

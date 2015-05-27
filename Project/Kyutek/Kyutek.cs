@@ -11,14 +11,11 @@ namespace Kyutek
 {
     class Kyutek
     {
-
-        // global multiplication index - easy, medium, hard
         const int WindowHeight = 36;
         public const string typewriterPath = @"audio/typewriter.wav";
-        
-        static void Main(string[] args)
+        static void Main()
         {
-            
+
             //set window size and buffer size
             Console.WindowHeight = WindowHeight;
             Console.BufferHeight = WindowHeight;
@@ -27,10 +24,22 @@ namespace Kyutek
 
             //initialize random generator
             Random rng = new Random();
-
+            Hero p = new Hero("3");
+            ConversationWithGitsa(p);
             //intro
             PlayIntro();
 
+            Console.WriteLine("Избери трудност:");
+            string difficultyChoice = Console.ReadLine();
+            switch (difficultyChoice)
+            {
+                case "Пълен айляк":
+                    break;
+                case "Нек'во нормално":
+                    break;
+                case "Като да се пребориш за концерт на Милко":
+                    break;
+            }
             // part 1 - introduction
             StoryIntroduction();
 
@@ -87,23 +96,21 @@ namespace Kyutek
             // credits
         }
 
-
-
         private static void PlayIntro()
         {
             SoundPlayer player = new SoundPlayer(@"audio/intro.wav");
             //team nar-shadda presents
             player.Play();
-            PrintAsciiText(@"text-files/intro-outro/team.txt", 20);
-            PrintAsciiText(@"text-files/intro-outro/nar-shadda.txt", 14);
-            PrintAsciiText(@"text-files/intro-outro/presents.txt", 3);
+            PrintAsciiText(@"text-files/intro-outro/team.txt");
+            PrintAsciiText(@"text-files/intro-outro/nar-shadda.txt");
+            PrintAsciiText(@"text-files/intro-outro/presents.txt");
             Thread.Sleep(1000);
             player.Stop();
 
             //game name
             player = new SoundPlayer(@"audio/vynil-rew.wav");
             player.Play();
-            PrintAsciiText(@"text-files/intro-outro/kyutek.txt", 8, false);
+            PrintAsciiText(@"text-files/intro-outro/kyutek.txt", false);
             player.Stop();
             Console.SetCursorPosition(28, 20);
             PrintTextFromFile(@"text-files/intro-outro/quest.txt");
@@ -200,12 +207,17 @@ namespace Kyutek
             return player;
         }
 
-        static void PrintAsciiText(string textPath, int posX = 0, bool clearScreen = true)
+        static void PrintAsciiText(string textPath, bool clearScreen = true)
         {
             StreamReader reader = new StreamReader(textPath);
-            int posY = 10;
             using (reader)
             {
+                string[] fileContents = File.ReadAllLines(textPath);
+                int numberOfLines = fileContents.Length;
+                int posX = (Console.BufferWidth - fileContents[0].Length) / 2;
+                int posY = (WindowHeight - numberOfLines) / 2;
+
+
                 while (true)
                 {
 
@@ -241,12 +253,13 @@ namespace Kyutek
             Thread.Sleep(400);
         }
 
-        static void PrintTextFromFile(string textPath)
+        static void PrintTextFromFile(string textPath, bool lineNumbers = false)
         {
             StreamReader reader = new StreamReader(textPath);
 
             using (reader)
             {
+                int lineCount = 1;
                 while (true)
                 {
                     string line = reader.ReadLine();
@@ -255,11 +268,31 @@ namespace Kyutek
                         break;
                     }
                     //print line
-                    PrintText(line);
+                    if (lineNumbers)
+                    {
+                        PrintText(String.Format("{0}. {1}", lineCount, line));
+                        lineCount++;
+                    }
+                    else
+                    {
+                        PrintText(line);
+                    }
                 }
             }
         }
+        static void PrintDrawing(string path)
+        {
+            string[] drawing = File.ReadAllLines(path);
+            int startIndex = (Console.WindowWidth - drawing[0].Length) / 2;
+            int startRow = (WindowHeight - drawing.Length) / 2;
+            foreach (var item in drawing)
+            {
+                Console.SetCursorPosition(startIndex, startRow);
+                Console.WriteLine(item);
+                startRow++;
+            }
 
+        }
         static void PrintDrawing(string path, Random rng)
         {
             string[] drawing = File.ReadAllLines(path);
@@ -271,7 +304,6 @@ namespace Kyutek
                 Console.WriteLine(item);
                 startRow++;
             }
-
             PrintRandomLine(@"text-files/text/taunts.txt", startIndex, startRow + 1, rng);
         }
 
@@ -293,30 +325,83 @@ namespace Kyutek
 
         static void GameOver()
         {
-            // invoke losing taunt
             Console.ForegroundColor = ConsoleColor.DarkRed;
-            PrintAsciiText(@"text-files/text/game-over.txt", 12, false);
+            PrintAsciiText(@"text-files/text/game-over.txt", false);
+            Thread.Sleep(3000);
+            Environment.Exit(0);
         }
 
         static void Victory()
         {
-            // invoke victory taunt
             Console.ForegroundColor = ConsoleColor.Green;
-            PrintAsciiText(@"text-files/text/win.txt", 27);
+            PrintAsciiText(@"text-files/text/win.txt");
+        }
+
+        static void TheEnd()
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            PrintAsciiText(@"text-files/story/the-end.txt");
         }
 
         static void Battle(Hero player, Enemy enemy, Random rng)
         {
-            
+
             // ignore this: invoke ascii drawing
-            
+
             //add bool var to track whose turn it is to strike
             // players should hit like this 1 2 2 1 1 2 2  ...
 
+            bool pleyPlayer = false;
+            int playerHit = rng.Next(0, 11);
+            enemy.CurrentLife -= rng.Next(player.MaxDmg, player.MaxDmg);
+
             while (true)
             {
+
+                if (pleyPlayer == true)
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        playerHit = rng.Next(0, 11);
+                        if (playerHit > 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            enemy.CurrentLife -= rng.Next(player.MaxDmg, player.MaxDmg);
+                            if (enemy.CurrentLife <= 0)
+                            {
+                                Victory();
+                            }
+                        }
+                    }
+                    pleyPlayer = false;
+                }
+                else
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        playerHit = rng.Next(0, 11);
+                        if (playerHit > 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            player.CurrentLife -= rng.Next(enemy.MaxDmg, enemy.MaxDmg);
+                            if (player.CurrentLife <= 0)
+                            {
+                                GameOver();
+                            }
+                        }
+                    }
+                    pleyPlayer = true;
+
+                }
+
                 // check whose turn it is
-                // rolls should be done by the player (read command from console)
+
                 // ignore this: commands can be "hit", "double", "stun", "heal"
                 // check for hit (roll random 0-10, if it is 0 - skip turn)
                 // if hit successful check dmg (roll random (MinDmg, MaxDmg+1)
@@ -325,6 +410,65 @@ namespace Kyutek
                 // if current health <= 0
                 // character dies - if hero dies invoke GameOver() and return, else invoke Victory()
             }
+        }
+
+        static void ConversationWithGitsa(Hero player)
+        {
+            PrintDrawing(@"text-files/drawings/gitsa.txt");
+            Console.WriteLine();
+            PrintTextFromFile(@"text-files/story/gitsa.txt");
+            Thread.Sleep(1500);
+            Console.Clear();
+
+            string[] playerDrawing = File.ReadAllLines(player.DrawingPath);
+            string[] playerTalk = File.ReadAllLines(@"text-files/story/player.txt");
+            int textIndex = 0;
+            for (int i = 0; i < playerDrawing.Length; i++)
+            {
+                Console.Write(playerDrawing[i]);
+                if (i>= playerDrawing.Length/3 && textIndex < playerTalk.Length)
+                {
+                    Console.WriteLine(" {0}. {1}", textIndex+1, playerTalk[textIndex]);
+                    textIndex++;
+                }
+                else
+                {
+                    Console.WriteLine();
+                }
+            }
+            
+            string choice = Console.ReadLine();
+            Thread.Sleep(500);
+            Console.Clear();
+            string[] endings = File.ReadAllLines(@"text-files/story/story-endings.txt");
+
+            switch (choice)
+            {
+                case "1":
+                    PrintText(endings[0]);
+                    break;
+                case "2":
+                    PrintText(endings[1]);
+                    break;
+                case "3":
+                    PrintText(endings[2]);
+                    break;
+                case "4":
+                    PrintText(endings[3]);
+                    break;
+                case "5":
+                    PrintText(endings[4]);
+                    break;
+                case "6":
+                    PrintText(endings[5]);
+                    break;
+                case "7":
+                    PrintText(endings[6]);
+                    break;
+            }
+            Thread.Sleep(1500);
+            Console.Clear();
+            TheEnd();
         }
     }
 }
