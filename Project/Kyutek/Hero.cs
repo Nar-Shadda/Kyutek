@@ -9,6 +9,7 @@
         private int maxDmg;
         private string name;
         private string drawingPath;
+        private string specialAttack;
 
         public string Name { get; set; }
         public int MaxLife { get; set; }
@@ -17,6 +18,7 @@
         public int MaxDmg { get; set; }
         public string HeroClass { get; set; }
         public string DrawingPath { get; set; }
+        public string SpecialAttack { get; set; }
         
         public Hero(string choice)
         {
@@ -30,6 +32,7 @@
                     this.MaxDmg = 16;
                     this.HeroClass = "Манаф-чекръкчия";
                     this.DrawingPath = @"text-files/drawings/warrior.txt";
+                    this.SpecialAttack = "stun";
                     break;
                 //rogue
                 case "2":
@@ -39,6 +42,7 @@
                     this.MaxDmg = 17;
                     this.HeroClass = "Дребен тарикат";
                     this.DrawingPath = @"text-files/drawings/rogue.txt";
+                    this.SpecialAttack = "double";
                     break;
                 //wizzard
                 case "3":
@@ -48,6 +52,7 @@
                     this.MaxDmg = 14;
                     this.HeroClass = "Ельоменат";
                     this.DrawingPath = @"text-files/drawings/wizard.txt";
+                    this.SpecialAttack = "heal";
                     break;
             }
         }
