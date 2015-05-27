@@ -1,4 +1,4 @@
-﻿namespace Kyutek
+﻿namespace TEST
 {
     class Hero
     {

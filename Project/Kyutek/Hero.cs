@@ -33,6 +33,7 @@
                     break;
                 //rogue
                 case "2":
+                    this.MaxLife = 100;
                     this.CurrentLife = 100;
                     this.MinDmg = 6;
                     this.MaxDmg = 15;
@@ -41,6 +42,7 @@
                     break;
                 //wizzard
                 case "3":
+                    this.MaxLife = 80;
                     this.CurrentLife = 80;
                     this.MinDmg = 11;
                     this.MaxDmg = 11;

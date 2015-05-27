@@ -13,6 +13,7 @@ namespace Kyutek
     {
         const int WindowHeight = 36;
         public const string typewriterPath = @"audio/typewriter.wav";
+
         static void Main()
         {
 
@@ -21,48 +22,80 @@ namespace Kyutek
             Console.BufferHeight = WindowHeight;
             Console.CursorVisible = false;
             Console.OutputEncoding = Encoding.UTF8;
+            Console.InputEncoding = Encoding.Unicode;
+            Console.ForegroundColor = ConsoleColor.Gray;
 
             //initialize random generator
             Random rng = new Random();
+
             //intro
-            //PlayIntro();
+            PlayIntro();
 
             //ChooseDifficulty(); - not complete
 
             // part 1 - introduction
-            //StoryIntroduction();
+            StoryIntroduction();
 
             // choose and create a character
             Hero player = CreateCharacter();
 
             // choose a name
             Console.SetCursorPosition(0, 13);
+            PrintText(String.Format("Честито! Вече си дипломиран {0}.", player.HeroClass));
             PrintText("Сега, когато вече си нов човек, е време да си избереш и ново име...");
             PrintText("Тоя път гледай да се постараеш повече!");
+
             Console.CursorVisible = true;
             player.Name = Console.ReadLine();
 
-            Console.WriteLine("И така, {0}, време е да да се разкършим!", player.Name); /* does not print cyrillic characters properly
-                                                                                        probably have to set encoding in hero.name setter*/
+            Console.WriteLine("И така, {0}, време е да да се разкършим!", player.Name); /* to save name in cyrillic use input encoding Unicode*/
+
             // story - 3 (going to the bar, first interaction) 
+            ClearScreen();
+            Console.SetCursorPosition(0, 13);
             PrintTextFromFile(@"text-files/story/story-3.txt");
 
             // first battle
+            ClearScreen();
             Battle(player, new Enemy(1), rng);
+            ClearScreen();
+            Console.SetCursorPosition(0, 13);
+            RegenerateLife(player);
+            BattleReward(player);
 
             // story - 4
+            ClearScreen();
+            Console.SetCursorPosition(0, 13);
             PrintTextFromFile(@"text-files/story/story-4.txt");
 
             // second battle
+            ClearScreen();
             Battle(player, new Enemy(2), rng);
+            ClearScreen();
+            Console.SetCursorPosition(0, 13);
+            RegenerateLife(player);
+            BattleReward(player);
 
             // story - 5
+            ClearScreen();
+            Console.SetCursorPosition(0, 13);
             PrintTextFromFile(@"text-files/story/story-5.txt");
+            // taking a rest
+            Thread.Sleep(2500);
+            ClearScreen();
+            RegenerateLife(player);
+            PrintTextFromFile(@"text-files/story/story-51.txt");
 
             // third battle
+            ClearScreen();
             Battle(player, new Enemy(3), rng);
+            ClearScreen();
+            RegenerateLife(player);
+            BattleReward(player);
 
             // secret encounter
+            ClearScreen();
+            Console.SetCursorPosition(0, 13);
             PrintTextFromFile(@"text-files/story/story-6.txt");
             Console.WriteLine("Y/N");
 
@@ -81,7 +114,7 @@ namespace Kyutek
                 {
                     PrintText("Намери бъклицата на дядо, ще я изпиеш ли?");
                     Console.WriteLine("Y/N");
-                    
+
                     string drink = Console.ReadLine().ToLower();
                     if (drink == "y")
                     {
@@ -114,24 +147,34 @@ namespace Kyutek
 
                 }
             }
-            
-            Thread.Sleep(1500);
-            Console.Clear();
 
             // right before the boss
+            ClearScreen();
+            Console.SetCursorPosition(0, 13);
             PrintTextFromFile(@"text-files/story/story-7.txt");
 
             // final battle
+            ClearScreen();
             Battle(player, new Enemy(4), rng);
-
-            //conversation with gitsa
-            ConversationWithGitsa(player);
+            Hero testHero = new Hero("1");
             
+            // conversation with gitsa
+            ClearScreen();
+            ConversationWithGitsa(testHero);
+
             //the end
             TheEnd();
 
             // outro (credits)
             PrintTextFromFile(@"text-files/intro-outro/outro.txt");
+        }
+
+        private static void ClearScreen()
+        {
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.CursorVisible = false;
+            Thread.Sleep(1500);
+            Console.Clear();
         }
 
         private static void ChooseDifficulty()
@@ -142,7 +185,7 @@ namespace Kyutek
             string difficultyChoice = Console.ReadLine();
             switch (difficultyChoice)
             {
-                case "Пълен айляк":
+                case "Пълен айляк": // add difficultyMultiplier
                     break;
                 case "Нек'во нормално":
                     break;
@@ -154,6 +197,7 @@ namespace Kyutek
         private static void PlayIntro()
         {
             SoundPlayer player = new SoundPlayer(@"audio/intro.wav");
+            
             //team nar-shadda presents
             player.Play();
             PrintAsciiText(@"text-files/intro-outro/team.txt");
@@ -167,7 +211,7 @@ namespace Kyutek
             player.Play();
             PrintAsciiText(@"text-files/intro-outro/kyutek.txt", false);
             player.Stop();
-            Console.SetCursorPosition(28, 20);
+            Console.SetCursorPosition(28, 22);
             PrintTextFromFile(@"text-files/intro-outro/quest.txt");
 
             //press enter to continue
@@ -183,10 +227,10 @@ namespace Kyutek
                         break;
                     }
                 }
-                Console.SetCursorPosition(33, 23);
+                Console.SetCursorPosition(33, 24);
                 Console.WriteLine("press enter");
                 Thread.Sleep(500);
-                Console.SetCursorPosition(33, 23);
+                Console.SetCursorPosition(33, 24);
                 Console.WriteLine("           ");
                 Thread.Sleep(500);
             }
@@ -210,9 +254,9 @@ namespace Kyutek
 
         static Hero CreateCharacter()
         {
-            Thread.Sleep(1000);
-            // ask user to choose a character class
-            Console.Clear();
+            ClearScreen();
+
+            //choose hero class
             Console.SetCursorPosition(30, 12);
             Console.WriteLine("Choose your destiny!!!");
             Console.WriteLine();
@@ -241,10 +285,13 @@ namespace Kyutek
             }
 
             Console.CursorVisible = false;
+
+            // create hero
             Hero player = new Hero(choice);
+
             string[] heroClass = File.ReadAllLines(@"text-files/text/class.txt");
-            Thread.Sleep(1000);
-            Console.Clear();
+
+            ClearScreen();
             Console.SetCursorPosition(0, 10);
             switch (choice)
             {
@@ -335,19 +382,29 @@ namespace Kyutek
                 }
             }
         }
+
         static void PrintDrawing(string path)
         {
             string[] drawing = File.ReadAllLines(path);
+            //startIndex and startRow to ensure picture is centered
             int startIndex = (Console.WindowWidth - drawing[0].Length) / 2;
             int startRow = (WindowHeight - drawing.Length) / 2;
-            foreach (var item in drawing)
+
+            foreach (var line in drawing)
             {
                 Console.SetCursorPosition(startIndex, startRow);
-                Console.WriteLine(item);
+                Console.WriteLine(line);
                 startRow++;
             }
-
         }
+
+        static int GetDrawingHeigth(string path)
+        {
+            string[] drawing = File.ReadAllLines(path);
+
+            return (WindowHeight - drawing.Length) / 2 + drawing.Length;
+        }
+
         static void PrintDrawing(string path, Random rng)
         {
             string[] drawing = File.ReadAllLines(path);
@@ -378,95 +435,230 @@ namespace Kyutek
             PrintText(currentText);
         }
 
-        static void GameOver()
+        static void GameOver(Random rng)
         {
+            ClearScreen();
+            PrintRandomLine(@"text-files/text/lose.txt", 0, 15, rng);
+
+            ClearScreen();
             Console.ForegroundColor = ConsoleColor.DarkRed;
             PrintAsciiText(@"text-files/text/game-over.txt", false);
+            Console.ForegroundColor = ConsoleColor.Gray;
+
             Thread.Sleep(3000);
             Environment.Exit(0);
         }
 
-        static void Victory()
+        static void Victory(Random rng)
         {
+            ClearScreen();
+            Console.ForegroundColor = ConsoleColor.Green;
+            PrintRandomLine(@"text-files/text/victory.txt", 20, 15, rng);
+            Console.ForegroundColor = ConsoleColor.Gray;
+
+            ClearScreen();
             Console.ForegroundColor = ConsoleColor.Green;
             PrintAsciiText(@"text-files/text/win.txt");
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         static void TheEnd()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             PrintAsciiText(@"text-files/story/the-end.txt");
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         static void Battle(Hero player, Enemy enemy, Random rng)
         {
+            ClearScreen();
 
-            // ignore this: invoke ascii drawing
-            PrintDrawing(player.DrawingPath, rng);
+            PrintDrawing(@"text-files/drawings/battle.txt");
+            int firstToHit = rng.Next(2);
+            bool isPlayer = firstToHit == 1 ? true : false;
 
-            PrintDrawing(enemy.DrawingPath, rng);
+            Console.WriteLine();
 
-            //add bool var to track whose turn it is to strike
-
-            bool isPlayer = false;
-            int playerHit = rng.Next(0, 10);
-            enemy.CurrentLife -= rng.Next(player.MaxDmg, player.MaxDmg);
+            //battle text should start below picture and continue untill end of screen
+            //if screen end is reached, continue from top
+            int drawingHeight = GetDrawingHeigth(@"text-files/drawings/battle.txt");
+            int eventRow = (WindowHeight - drawingHeight) / 2 + drawingHeight - 2;
+            int talkRow = eventRow + 2;
 
             while (true)
             {
-
-                if (isPlayer == true)
+                PrintLifeLeft(player, enemy);
+                for (int i = 0; i < 2; i++)
                 {
-                    for (int i = 0; i < 2; i++)
+                    Thread.Sleep(500);
+                    if (isPlayer)
                     {
-                        playerHit = rng.Next(0, 11);
-                        if (playerHit > 0)
+                        //check if player hits (10% chance to miss)
+                        int chanceToHit = rng.Next(10);
+                        if (chanceToHit == 0)
                         {
+                            Thread.Sleep(500);
+
+                            ClearRows(eventRow, talkRow);
+                            Console.SetCursorPosition(2, eventRow);
+                            Console.WriteLine("Замахваш и пропускаш... кофти.");
+                            isPlayer = !isPlayer;
                             continue;
                         }
                         else
                         {
-                            enemy.CurrentLife -= rng.Next(player.MaxDmg, player.MaxDmg);
-                            if (enemy.CurrentLife <= 0)
+                            Thread.Sleep(500);
+                            //calculate dmg between hero min and max dmg
+                            int damage = rng.Next(player.MinDmg, player.MaxDmg + 1);
+
+                            ClearRows(eventRow, talkRow);
+                            Console.SetCursorPosition(2, eventRow);
+                            Console.WriteLine("Чудесен удар. {0} остава {1} точки живот по-малко.", enemy.Name, damage);
+
+                            enemy.CurrentLife -= damage;
+
+                            //check if you kill the enemy
+                            if (!enemy.IsAlive())
                             {
-                                Victory();
+                                Thread.Sleep(500);
+                                Victory(rng);
+                                return;
                             }
+
+                            //check if player will say something
+                            int saySomething = rng.Next(2);
+                            if (saySomething == 1)
+                            {
+                                Thread.Sleep(500);
+                                Console.SetCursorPosition(2, talkRow);
+                                Console.Write("{0}: ", player.Name);
+                                PrintRandomLine(@"text-files/text/infight.txt", 4 + player.Name.Length, talkRow, rng);
+                            }
+
+                            //change player
+                            isPlayer = !isPlayer;
                         }
                     }
-                    isPlayer = false;
-                }
-                else
-                {
-                    for (int i = 0; i < 2; i++)
+                    else
                     {
-                        playerHit = rng.Next(0, 11);
-                        if (playerHit > 0)
+                        int chanceToHit = rng.Next(9); // slightly lower chance to hit for enemies
+                        if (chanceToHit == 0)
                         {
+                            Thread.Sleep(500);
+                            ClearRows(eventRow, talkRow);
+                            Console.SetCursorPosition(2, eventRow);
+                            Console.WriteLine("{0} не успява да те улучи. Голям позор!", enemy.Name);
+                            isPlayer = !isPlayer;
                             continue;
                         }
                         else
                         {
-                            player.CurrentLife -= rng.Next(enemy.MaxDmg, enemy.MaxDmg);
-                            if (player.CurrentLife <= 0)
+                            Thread.Sleep(500);
+                            int damage = rng.Next(enemy.MinDmg, enemy.MaxDmg + 1);
+
+                            ClearRows(eventRow, talkRow);
+                            Console.SetCursorPosition(2, eventRow);
+                            Console.WriteLine("{0} за малко да ти отнесе главата. Губиш {1} точки живот.", enemy.Name, damage);
+
+                            player.CurrentLife -= damage;
+
+                            if (!player.IsAlive())
                             {
-                                GameOver();
+                                Thread.Sleep(500);
+                                GameOver(rng);
                             }
+
+                            //check if enemy says something
+                            int saySomething = rng.Next(2);
+                            if (saySomething == 1)
+                            {
+                                Thread.Sleep(500);
+                                Console.SetCursorPosition(2, talkRow);
+                                Console.Write("{0}: ", enemy.Name);
+                                PrintRandomLine(@"text-files/text/infight-enemy.txt", 4 + enemy.Name.Length, talkRow, rng);
+                            }
+                            isPlayer = !isPlayer;
                         }
                     }
-                    isPlayer = true;
-
                 }
 
-                // check whose turn it is
-
-                // ignore this: commands can be "hit", "double", "stun", "heal"
-                // check for hit (roll random 0-10, if it is 0 - skip turn)
-                // if hit successful check dmg (roll random (MinDmg, MaxDmg+1)
-                // substract dmg done from player/enemy current health
-                // check if current health is <= 0
-                // if current health <= 0
-                // character dies - if hero dies invoke GameOver() and return, else invoke Victory()
+                //at the end of the turn change players again to switch turns next round
+                isPlayer = !isPlayer;
             }
+        }
+
+        private static void RegenerateLife(Hero player)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+
+            // regenerate half of the lost health points
+            int regeneratedLife = (player.MaxLife - player.CurrentLife) / 2;
+            player.CurrentLife +=  regeneratedLife; 
+            
+            PrintText(String.Format("Усещаш как силите ти се възвръщат. Възобновяваш {0} точки живот.", regeneratedLife));
+            
+            Console.ForegroundColor = ConsoleColor.Gray;
+        }
+
+        private static void PrintLifeLeft(Hero player, Enemy enemy)
+        {
+            //print player and enemy current life above battle drawing
+            Console.SetCursorPosition(0, 2);
+            Console.Write(new string(' ', 75));
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(20, 2);
+            Console.Write(String.Format("{0}: {1}HP", player.Name, player.CurrentLife));
+            Console.SetCursorPosition(45, 2);
+            Console.Write(String.Format("{0}: {1}HP", enemy.Name, enemy.CurrentLife));
+            Console.ForegroundColor = ConsoleColor.Gray;
+        }
+
+        private static void ClearRows(int startRow, int endRow)
+        {
+            Thread.Sleep(1000);
+            for (int i = startRow; i <= endRow; i++)
+            {
+                Console.SetCursorPosition(0, i);
+                Console.Write(new string(' ', 75));
+            }
+        }
+
+        static void BattleReward(Hero player)
+        {
+            ClearScreen();
+            //add logic for battle rewards
+            //choose between +dmg, +life or +dmg and +life
+            PrintText("Отрязваш главата на противника и изпиваш кръвта му.");
+            PrintText("Усещаш как силите му се вливат в теб.");
+            PrintText("Избери си награда!");
+
+            Console.WriteLine("[(1) Здраве]   [(2) Сила]   [(3) Баланс]");
+            
+            string choice = Console.ReadLine();
+            string result = String.Empty; // add results
+            switch (choice)
+            {
+                case "1":
+                    player.MaxLife += 30;
+                    player.CurrentLife += 30;
+                    result = String.Format("Ти избра {0}, получаваш {1}", "Здраве", "30 точки живот");
+                    break;
+                case "2":
+                    player.MinDmg += 10;
+                    player.MaxDmg += 10;
+                    result = String.Format("Ти избра {0}, получаваш {1}", "Сила", "10 точки сила");
+                    break;
+                case "3":
+                    player.MaxLife += 15;
+                    player.MinDmg += 5;
+                    player.MaxDmg += 5;
+                    player.CurrentLife += 15;
+                    result = String.Format("Ти избра {0}, получаваш {1}", "Баланс", "15 точки живот и 5 точки сила");
+                    break;
+            }
+
+            PrintText(result);
+
         }
 
         static void ConversationWithGitsa(Hero player)
@@ -474,8 +666,7 @@ namespace Kyutek
             PrintDrawing(@"text-files/drawings/gitsa.txt");
             Console.WriteLine();
             PrintTextFromFile(@"text-files/story/gitsa.txt");
-            Thread.Sleep(1500);
-            Console.Clear();
+            ClearScreen();
 
             string[] playerDrawing = File.ReadAllLines(player.DrawingPath);
             string[] playerTalk = File.ReadAllLines(@"text-files/story/player.txt");
@@ -523,8 +714,7 @@ namespace Kyutek
                     PrintText(endings[6]);
                     break;
             }
-            Thread.Sleep(1500);
-            Console.Clear();
+            ClearScreen();
         }
     }
 }

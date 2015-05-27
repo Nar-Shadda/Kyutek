@@ -39,17 +39,18 @@ namespace TEST
                         if (chanceToHit == 0)
                         {
                             Console.WriteLine("Замахваш и пропускаш... кофти.");
-                            !isPlayer;
+                            isPlayer = !isPlayer;
                             continue;
                         }
                         else
                         {
                             //calculate dmg between hero min and max dmg
                             int damage = rng.Next(player.MinDmg, player.MaxDmg + 1);
+                            Console.WriteLine("Чудесен удар. {0} с {1} точки живот по-малко.", enemy.Name, damage);
                             enemy.CurrentLife -= damage;
 
                             // check if you kill the enemy
-                            if (!enemy.IsAlive)
+                            if (enemy.IsAlive())
                             {
                                 //Victory
                                 // call rewards - to implement
@@ -63,7 +64,7 @@ namespace TEST
                             }
 
                             // change player
-                            !isPlayer;
+                            isPlayer = !isPlayer;
                         }
                     }
                     else
@@ -72,14 +73,14 @@ namespace TEST
                         if (chanceToHit == 0)
                         {
                             Console.WriteLine("{0} не успява да те улучи. Голям позор!", enemy.Name);
-                            !isPlayer;
+                            isPlayer = !isPlayer;
                             continue;
                         }
                         else
                         {
                             int damage = rng.Next(enemy.MinDmg, enemy.MaxDmg + 1);
                             player.CurrentLife -= damage;
-                            if (!player.IsAlive)
+                            if (!player.IsAlive())
                             {
                                 //game over
                             }
@@ -89,12 +90,11 @@ namespace TEST
                             {
                                 // say something from infight-enemy
                             }
-                            !isPlayer;
+                            isPlayer = !isPlayer;
                         }
                     }
                     // at the end of the turn change players again to switch turns next round
-                    !isPlayer;
-
+                    isPlayer = !isPlayer;
                 }
 
             }
