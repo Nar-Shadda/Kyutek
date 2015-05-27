@@ -12,41 +12,92 @@ namespace TEST
         const int WindowHeight = 36;
         static void Main()
         {
-            
+
             Console.WindowHeight = WindowHeight;
             Console.BufferHeight = WindowHeight;
             Console.CursorVisible = false;
             Console.OutputEncoding = Encoding.UTF8;
             Random rng = new Random();
-            
 
 
-            string[] drawing = File.ReadAllLines(@"../../../Kyutek/bin/Debug/text-files/drawings/wizard.txt");
-            int startIndex = (80-drawing[0].Length)/2;
-            int y = 3;
-            foreach (string row in drawing)
+
+
+        }
+        static void Battle(Hero player, Enemy enemy, Random rng) // can implement difficulty with multiplier in battle, not in classes
+        {
+            int firstToHit = rng.Next(2);
+            bool isPlayer = firstToHit == 1 ? true : false;
+
+            while (true)
             {
-                Console.SetCursorPosition(startIndex, y);
-                Console.WriteLine(row);
-                y++;
-            }
-            Console.WriteLine();
-
-            string[] line = File.ReadAllLines(@"../../../Kyutek/bin/Debug/text-files/text/taunts.txt");
-            Console.SetCursorPosition(startIndex, ++y);
-            string print = line[rng.Next(line.Length)];
-            //print = line[11];
-            for (int i = 0; i < print.Length; i++)
-            {
-                if (print[i] =='+')
+                for (int i = 0; i < 2; i++)
                 {
-                    Console.WriteLine();
-                    Console.SetCursorPosition(startIndex, ++y);
-                    continue;
+                    if (isPlayer)
+                    {
+                        //check if player hits (10% chance to miss)
+                        int chanceToHit = rng.Next(10);
+                        if (chanceToHit == 0)
+                        {
+                            Console.WriteLine("Замахваш и пропускаш... кофти.");
+                            !isPlayer;
+                            continue;
+                        }
+                        else
+                        {
+                            //calculate dmg between hero min and max dmg
+                            int damage = rng.Next(player.MinDmg, player.MaxDmg + 1);
+                            enemy.CurrentLife -= damage;
+
+                            // check if you kill the enemy
+                            if (!enemy.IsAlive)
+                            {
+                                //Victory
+                                // call rewards - to implement
+                            }
+
+                            // check if player will say something
+                            int saySomething = rng.Next(2);
+                            if (saySomething == 1)
+                            {
+                                // print random line from infight
+                            }
+
+                            // change player
+                            !isPlayer;
+                        }
+                    }
+                    else
+                    {
+                        int chanceToHit = rng.Next(9); // slightly lower chance to hit for enemies
+                        if (chanceToHit == 0)
+                        {
+                            Console.WriteLine("{0} не успява да те улучи. Голям позор!", enemy.Name);
+                            !isPlayer;
+                            continue;
+                        }
+                        else
+                        {
+                            int damage = rng.Next(enemy.MinDmg, enemy.MaxDmg + 1);
+                            player.CurrentLife -= damage;
+                            if (!player.IsAlive)
+                            {
+                                //game over
+                            }
+
+                            int saySomething = rng.Next(2);
+                            if (saySomething == 1)
+                            {
+                                // say something from infight-enemy
+                            }
+                            !isPlayer;
+                        }
+                    }
+                    // at the end of the turn change players again to switch turns next round
+                    !isPlayer;
+
                 }
-                Console.Write(print[i]);
+
             }
-            Console.ReadLine();
         }
     }
 }
