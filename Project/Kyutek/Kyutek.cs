@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 using System.Media;
 
@@ -13,7 +10,7 @@ namespace Kyutek
     {
         const int WindowHeight = 36;
         public const string typewriterPath = @"audio/typewriter.wav";
-
+        public static double difficultyMultiplier;
         static void Main()
         {
 
@@ -31,23 +28,37 @@ namespace Kyutek
             //intro
             PlayIntro();
 
-            //ChooseDifficulty(); - not complete
+            //choose difficulty
+            ClearScreen();
+            ChooseDifficulty();
 
             // part 1 - introduction
-            StoryIntroduction();
+            ClearScreen();
+            Console.SetCursorPosition(0, 13);
+            string tempName = StoryIntroduction();
 
             // choose and create a character
             Hero player = CreateCharacter();
+            
+            //shortcut
+            if (tempName == "SoftUniRocks")
+            {
+                player.Name = tempName;
+                BattleReward(player);
+                BattleReward(player);
+                BattleReward(player);
+                goto shortCut;
+            }
 
             // choose a name
             Console.SetCursorPosition(0, 13);
             PrintText(String.Format("Честито! Вече си дипломиран {0}.", player.HeroClass));
             PrintText("Сега, когато вече си нов човек, е време да си избереш и ново име...");
-            PrintText("Тоя път гледай да се постараеш повече!");
+            PrintText(String.Format("Тоя път гледай да измислиш нещо по-добро от '{0}'!", tempName));
 
             Console.CursorVisible = true;
+            
             player.Name = Console.ReadLine();
-
             Console.WriteLine("И така, {0}, време е да да се разкършим!", player.Name); /* to save name in cyrillic use input encoding Unicode*/
 
             // story - 3 (going to the bar, first interaction) 
@@ -93,6 +104,9 @@ namespace Kyutek
             RegenerateLife(player);
             BattleReward(player);
 
+            //shortcut
+            shortCut:
+
             // secret encounter
             ClearScreen();
             Console.SetCursorPosition(0, 13);
@@ -119,16 +133,16 @@ namespace Kyutek
                     if (drink == "y")
                     {
                         PrintText("Добро решение, няма нищо по-добро от отлежала гроздова!");
-                        PrintText("Усещаш мощен прилив на енергия, получаваш допълнително 10 сила");
-                        player.MinDmg += 10;
-                        player.MaxDmg += 10;
+                        PrintText("Усещаш мощен прилив на енергия, получаваш допълнително 15 сила.");
+                        player.MinDmg += 15;
+                        player.MaxDmg += 15;
                     }
                 }
 
                 else if (chance == 2 || chance == 4 || chance == 8)
                 {
                     PrintText("Намираш много запазено пардесю! Пробваш го и установяваш, че ти седи чудесно!");
-                    PrintText("Получаваш допълнително 30 точки живот");
+                    PrintText("Получаваш допълнително 30 точки живот.");
                     player.MaxLife += 30;
                     player.CurrentLife = player.MaxLife;
                 }
@@ -141,10 +155,9 @@ namespace Kyutek
                 }
                 else
                 {
-                    PrintText("Драсваш клечка кибрит и оглеждаш съдържанието на дупката");
-                    PrintText("За съжаление намираш само старо списание със слепени страници и шишенце вазелин");
+                    PrintText("Драсваш клечка кибрит и оглеждаш съдържанието на дупката.");
+                    PrintText("За съжаление намираш само старо списание със слепени страници и шишенце вазелин.");
                     PrintText("Помисляш си 'Каква странна комбинация' и продължаваш по пътя си.");
-
                 }
             }
 
@@ -179,17 +192,31 @@ namespace Kyutek
 
         private static void ChooseDifficulty()
         {
-
-            // need to add global var and this method shoud set its value according to user choice
+            Console.SetCursorPosition(20, 12);
             Console.WriteLine("Избери трудност:");
+            Console.SetCursorPosition(20, 14);
+            Console.WriteLine("[1.Пълен айляк]");
+            Console.SetCursorPosition(20, 16);
+            Console.WriteLine("[2.Нек'во нормално]");
+            Console.SetCursorPosition(20, 18);
+            Console.WriteLine("[3.Като да се вредиш за автограф от Милко]");
+            Console.SetCursorPosition(20, 20);
+            Console.Write("Какво избираш? ");
+            Console.CursorVisible = true;
             string difficultyChoice = Console.ReadLine();
+            Console.CursorVisible = false;
+            
+            //set difficulty multiplier according to choice
             switch (difficultyChoice)
             {
-                case "Пълен айляк": // add difficultyMultiplier
+                case "1":
+                    difficultyMultiplier = 0.5;
                     break;
-                case "Нек'во нормално":
+                case "2":
+                    difficultyMultiplier = 1;
                     break;
-                case "Като да се пребориш за концерт на Милко":
+                case "3":
+                    difficultyMultiplier = 1.5;
                     break;
             }
         }
@@ -236,12 +263,12 @@ namespace Kyutek
             }
         }
 
-        private static void StoryIntroduction()
+        private static string StoryIntroduction()
         {
             Console.SetCursorPosition(0, 10);
             PrintTextFromFile(@"text-files/story/story-1.txt");
             Console.CursorVisible = true;
-            Console.ReadLine();
+            string tempName = Console.ReadLine();
             Console.CursorVisible = false;
             Thread.Sleep(750);
             Console.Clear();
@@ -250,6 +277,7 @@ namespace Kyutek
             Thread.Sleep(500);
             PrintTextFromFile(@"text-files/story/story-2.txt");
             Console.WriteLine();
+            return tempName;
         }
 
         static Hero CreateCharacter()
@@ -472,7 +500,12 @@ namespace Kyutek
         static void Battle(Hero player, Enemy enemy, Random rng)
         {
             ClearScreen();
+            PrintDrawing(player.DrawingPath, rng);
 
+            ClearScreen();
+            PrintDrawing(enemy.DrawingPath, rng);
+
+            ClearScreen();
             PrintDrawing(@"text-files/drawings/battle.txt");
             int firstToHit = rng.Next(2);
             bool isPlayer = firstToHit == 1 ? true : false;
@@ -513,7 +546,7 @@ namespace Kyutek
 
                             ClearRows(eventRow, talkRow);
                             Console.SetCursorPosition(2, eventRow);
-                            Console.WriteLine("Чудесен удар. {0} остава {1} точки живот по-малко.", enemy.Name, damage);
+                            Console.WriteLine("Чудесен удар. {0} губи {1} точки живот.", enemy.Name, damage);
 
                             enemy.CurrentLife -= damage;
 
@@ -541,7 +574,8 @@ namespace Kyutek
                     }
                     else
                     {
-                        int chanceToHit = rng.Next(9); // slightly lower chance to hit for enemies
+                        // slightly lower chance to hit for enemies
+                        int chanceToHit = rng.Next(9);
                         if (chanceToHit == 0)
                         {
                             Thread.Sleep(500);
@@ -555,6 +589,8 @@ namespace Kyutek
                         {
                             Thread.Sleep(500);
                             int damage = rng.Next(enemy.MinDmg, enemy.MaxDmg + 1);
+                            //difficulty multiplier adjusts enemy dmg
+                            damage = (int)(Math.Round(damage * difficultyMultiplier));
 
                             ClearRows(eventRow, talkRow);
                             Console.SetCursorPosition(2, eventRow);
@@ -584,13 +620,14 @@ namespace Kyutek
 
                 //at the end of the turn change players again to switch turns next round
                 isPlayer = !isPlayer;
+                Thread.Sleep(500);
             }
         }
 
         private static void RegenerateLife(Hero player)
         {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(4, 12);
             // regenerate half of the lost health points
             int regeneratedLife = (player.MaxLife - player.CurrentLife) / 2;
             player.CurrentLife +=  regeneratedLife; 
@@ -619,7 +656,7 @@ namespace Kyutek
             for (int i = startRow; i <= endRow; i++)
             {
                 Console.SetCursorPosition(0, i);
-                Console.Write(new string(' ', 75));
+                Console.Write(new string(' ', 80));
             }
         }
 
@@ -628,10 +665,14 @@ namespace Kyutek
             ClearScreen();
             //add logic for battle rewards
             //choose between +dmg, +life or +dmg and +life
+            Console.SetCursorPosition(15, 12);
             PrintText("Отрязваш главата на противника и изпиваш кръвта му.");
+            Console.SetCursorPosition(15, 14);
             PrintText("Усещаш как силите му се вливат в теб.");
+            Console.SetCursorPosition(15, 16);
             PrintText("Избери си награда!");
 
+            Console.SetCursorPosition(15, 18);
             Console.WriteLine("[(1) Здраве]   [(2) Сила]   [(3) Баланс]");
             
             string choice = Console.ReadLine();
@@ -639,21 +680,21 @@ namespace Kyutek
             switch (choice)
             {
                 case "1":
-                    player.MaxLife += 30;
-                    player.CurrentLife += 30;
-                    result = String.Format("Ти избра {0}, получаваш {1}", "Здраве", "30 точки живот");
+                    player.MaxLife += 50;
+                    player.CurrentLife += 50;
+                    result = String.Format("Ти избра {0}, получаваш {1}", "Здраве", "50 точки живот");
                     break;
                 case "2":
-                    player.MinDmg += 10;
-                    player.MaxDmg += 10;
-                    result = String.Format("Ти избра {0}, получаваш {1}", "Сила", "10 точки сила");
+                    player.MinDmg += 15;
+                    player.MaxDmg += 15;
+                    result = String.Format("Ти избра {0}, получаваш {1}", "Сила", "15 точки сила");
                     break;
                 case "3":
-                    player.MaxLife += 15;
-                    player.MinDmg += 5;
-                    player.MaxDmg += 5;
+                    player.MaxLife += 20;
+                    player.MinDmg += 8;
+                    player.MaxDmg += 8;
                     player.CurrentLife += 15;
-                    result = String.Format("Ти избра {0}, получаваш {1}", "Баланс", "15 точки живот и 5 точки сила");
+                    result = String.Format("Ти избра {0}, получаваш {1}", "Баланс", "20 точки живот и 8 точки сила");
                     break;
             }
 

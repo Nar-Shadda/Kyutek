@@ -26,26 +26,26 @@
                 case "1":
                     this.MaxLife = 120;
                     this.CurrentLife = 120;
-                    this.MinDmg = 9;
-                    this.MaxDmg = 12;
+                    this.MinDmg = 11;
+                    this.MaxDmg = 16;
                     this.HeroClass = "Манаф-чекръкчия";
                     this.DrawingPath = @"text-files/drawings/warrior.txt";
                     break;
                 //rogue
                 case "2":
-                    this.MaxLife = 100;
-                    this.CurrentLife = 100;
-                    this.MinDmg = 6;
-                    this.MaxDmg = 15;
+                    this.MaxLife = 105;
+                    this.CurrentLife = 105;
+                    this.MinDmg = 9;
+                    this.MaxDmg = 17;
                     this.HeroClass = "Дребен тарикат";
                     this.DrawingPath = @"text-files/drawings/rogue.txt";
                     break;
                 //wizzard
                 case "3":
-                    this.MaxLife = 80;
-                    this.CurrentLife = 80;
-                    this.MinDmg = 11;
-                    this.MaxDmg = 11;
+                    this.MaxLife = 90;
+                    this.CurrentLife = 90;
+                    this.MinDmg = 14;
+                    this.MaxDmg = 14;
                     this.HeroClass = "Ельоменат";
                     this.DrawingPath = @"text-files/drawings/wizard.txt";
                     break;
