@@ -1,0 +1,7 @@
+moholovka - typewriter, printing text from files, ASCII text, intro music
+
+Righteous - game concept, content, classes and objects, advanced features
+
+knggroup - base battle logic and calculations, ASCII drawing concepts
+
+wanderer_sturm - assisted with class design and ASCII drawing import

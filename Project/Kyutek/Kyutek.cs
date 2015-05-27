@@ -21,7 +21,7 @@ namespace Kyutek
             Console.OutputEncoding = Encoding.UTF8;
             Console.InputEncoding = Encoding.Unicode;
             Console.ForegroundColor = ConsoleColor.Gray;
-            
+
             //initialize random generator
             Random rng = new Random();
 
@@ -102,8 +102,8 @@ namespace Kyutek
             ClearScreen();
             RegenerateLife(player);
 
-            //shortcut
-            shortCut:
+        //shortcut
+        shortCut:
 
             //secret encounter
             ClearScreen();
@@ -179,10 +179,41 @@ namespace Kyutek
             ConversationWithGitsa(player);
 
             //the end
+            ClearScreen();
             TheEnd();
 
-            // outro (credits)
+            //outro (credits)
+            ClearScreen();
+            Outro();
+        }
+
+        private static void Outro()
+        {
+            Console.SetCursorPosition(0, 10);
             PrintTextFromFile(@"text-files/intro-outro/outro.txt");
+            ClearScreen();
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            PrintAsciiText(@"text-files/intro-outro/nar-shadda.txt", false);
+            Console.WriteLine();
+            string[] teamMembers = File.ReadAllLines(@"text-files/text/team.txt");
+            for (int i = 0; i < teamMembers.Length; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
+
+                Console.WriteLine(teamMembers[i]);
+            }
+
+            Console.ReadLine();
+            Environment.Exit(0);
         }
 
         private static void ClearScreen()
@@ -230,16 +261,20 @@ namespace Kyutek
 
             //team nar-shadda presents
             player.Play();
+            Console.ForegroundColor = ConsoleColor.Yellow;
             PrintAsciiText(@"text-files/intro-outro/team.txt");
             PrintAsciiText(@"text-files/intro-outro/nar-shadda.txt");
             PrintAsciiText(@"text-files/intro-outro/presents.txt");
+            Console.ForegroundColor = ConsoleColor.Gray;
             Thread.Sleep(1000);
             player.Stop();
 
             //game name
             player = new SoundPlayer(@"audio/vynil-rew.wav");
             player.Play();
+            Console.ForegroundColor = ConsoleColor.Cyan;
             PrintAsciiText(@"text-files/intro-outro/kyutek.txt", false);
+            Console.ForegroundColor = ConsoleColor.Gray;
             player.Stop();
             Console.SetCursorPosition(28, 22);
             PrintTextFromFile(@"text-files/intro-outro/quest.txt");
@@ -487,7 +522,7 @@ namespace Kyutek
 
             // print the string on the console using PrintText method
             int startIndex = (Console.WindowWidth - currentText.Length) / 2;
-            Console.SetCursorPosition(startIndex, WindowHeight/2);
+            Console.SetCursorPosition(startIndex, WindowHeight / 2);
             PrintText(currentText);
         }
 
@@ -509,7 +544,7 @@ namespace Kyutek
         {
             ClearScreen();
             Console.ForegroundColor = ConsoleColor.Green;
-            
+
             PrintRandomLine(@"text-files/text/victory.txt", rng);
 
             ClearScreen();
@@ -556,7 +591,7 @@ namespace Kyutek
             while (true)
             {
                 PrintLifeLeft(player, enemy);
-                
+
                 for (int i = 0; i < 2; i++)
                 {
                     Thread.Sleep(500);
@@ -888,7 +923,7 @@ namespace Kyutek
             string choice = Console.ReadLine();
             Thread.Sleep(500);
             Console.Clear();
-           
+
             string[] endings = File.ReadAllLines(@"text-files/story/story-endings.txt");
             ClearScreen();
             switch (choice)
