@@ -669,7 +669,7 @@ namespace Kyutek
                             {
                                 case "stun":
                                     int chanceToStun = rng.Next(10);
-                                    if (chanceToStun > 5)
+                                    if (chanceToStun == 1 || chanceToStun == 4 || chanceToStun == 7 || chanceToStun == 9)
                                     {
                                         isStunnedEnemy = true;
                                         int damage = rng.Next(player.MinDmg, player.MaxDmg + 1) / 2;
@@ -701,7 +701,7 @@ namespace Kyutek
 
                                 case "double":
                                     int chanceForDouble = rng.Next(10);
-                                    if (chanceForDouble > 5)
+                                    if (chanceForDouble == 1 || chanceForDouble == 4 || chanceForDouble == 7 || chanceForDouble == 9)
                                     {
                                         int damage = rng.Next(player.MinDmg, player.MaxDmg + 1) * 2;
 
@@ -732,7 +732,7 @@ namespace Kyutek
 
                                 case "heal":
                                     int chanceForHeal = rng.Next(10);
-                                    if (chanceForHeal > 6)
+                                    if (chanceForHeal == 1 || chanceForHeal == 4 || chanceForHeal == 7)
                                     {
                                         ClearRows(eventRow, commandRow);
                                         Console.SetCursorPosition(2, eventRow);
