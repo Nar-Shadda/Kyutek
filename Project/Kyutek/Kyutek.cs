@@ -563,8 +563,9 @@ namespace Kyutek
         static void Battle(Hero player, Enemy enemy, Random rng)
         {
             ClearScreen();
+            Thread.Sleep(1000);
             PrintDrawing(player.DrawingPath, rng);
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
             ClearScreen();
             PrintDrawing(enemy.DrawingPath, rng);
 
